@@ -123,6 +123,7 @@ export default function App() {
                 records={records}
                 onTestTamper={handleTestTamper}
                 onResetLedger={handleResetLedger}
+                onRecordUpdated={(updated) => handleDecisionCreated(updated)}
                 selectedBlockId={selectedRecordId}
               />
             )}

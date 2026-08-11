@@ -22,11 +22,19 @@ import {
   TrendingDown,
   Sparkles,
   Edit3,
+  Wallet,
+  Loader2,
+  CheckCircle2,
 } from 'lucide-react';
 import { Dataset, UseCaseType, DecisionRecord, AgentStep, DataMetric, EntityRecord } from '../types';
 import { PROCUREMENT_PRESET, MEDICAL_PRESET, LOAN_PRESET } from '../data/presets';
 import { MathScoringExplainer } from './MathScoringExplainer';
 import { executeClientAgentWorkflow } from '../utils/clientAgentEngine';
+import {
+  isMetaMaskInstalled,
+  notarizeOnSepoliaWithMetaMask,
+  applyWeb3TxToRecord,
+} from '../utils/web3Provider';
 
 const CUSTOM_CLOUD_PRESET: Dataset = {
   id: 'ds-custom-cloud-01',
@@ -123,6 +131,47 @@ export const AgentWorkspace: React.FC<AgentWorkspaceProps> = ({
   const [steps, setSteps] = useState<AgentStep[]>([]);
   const [currentDecision, setCurrentDecision] = useState<DecisionRecord | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // Web3 MetaMask Notarization State
+  const [isNotarizingWeb3, setIsNotarizingWeb3] = useState<boolean>(false);
+  const [web3Status, setWeb3Status] = useState<string | null>(null);
+  const [web3Error, setWeb3Error] = useState<string | null>(null);
+
+  // Trigger MetaMask transaction on Sepolia Testnet
+  const handleNotarizeWithMetaMask = async () => {
+    if (!currentDecision) return;
+
+    if (!isMetaMaskInstalled()) {
+      setWeb3Error(
+        'MetaMask Wallet extension is not installed in your browser. Please install the MetaMask extension from https://metamask.io to sign Sepolia testnet transactions.'
+      );
+      return;
+    }
+
+    setIsNotarizingWeb3(true);
+    setWeb3Error(null);
+    setWeb3Status('Connecting to MetaMask & verifying Sepolia network...');
+
+    try {
+      const result = await notarizeOnSepoliaWithMetaMask(currentDecision);
+      setWeb3Status('Transaction broadcasted to Sepolia! Updating ledger...');
+
+      const updatedRecord = applyWeb3TxToRecord(currentDecision, result);
+      setCurrentDecision(updatedRecord);
+      onDecisionCreated(updatedRecord);
+
+      setWeb3Status(`Successfully notarized on Sepolia! Tx: ${result.txHash.substring(0, 14)}...`);
+    } catch (err: any) {
+      console.error('MetaMask notarization error:', err);
+      if (err.code === 4001 || err?.message?.includes('user rejected')) {
+        setWeb3Error('Transaction signature was cancelled/rejected in MetaMask.');
+      } else {
+        setWeb3Error(err.message || 'Error signing transaction with MetaMask on Sepolia.');
+      }
+    } finally {
+      setIsNotarizingWeb3(false);
+    }
+  };
 
   // Switch domain preset or custom mode
   const handleUseCaseChange = (useCase: UseCaseType) => {
@@ -786,6 +835,70 @@ export const AgentWorkspace: React.FC<AgentWorkspaceProps> = ({
                 <span>View On-Chain Block</span>
               </button>
             </div>
+          </div>
+
+          {/* Web3 MetaMask Notarization Action Box */}
+          <div className="p-4 rounded-xl bg-gradient-to-r from-indigo-950/90 via-slate-900 to-indigo-950/90 border border-indigo-500/50 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center space-x-3">
+                <div className="h-10 w-10 rounded-xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 shrink-0">
+                  <Wallet className="h-5 w-5 text-indigo-300" />
+                </div>
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs font-bold text-white">Gemini AI Off-Chain Reasoning Done</span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
+                      Sepolia Testnet Storage Option
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300 mt-0.5">
+                    Klik tombol ini jika ingin menyimpan & mencatatkan bukti cryptographic hash keputusan ini secara permanen di blockchain Sepolia menggunakan MetaMask.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={handleNotarizeWithMetaMask}
+                disabled={isNotarizingWeb3}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-600 hover:opacity-95 text-white font-bold text-xs flex items-center gap-2 shadow-xl shadow-indigo-600/30 transition-all shrink-0 active:scale-95 disabled:opacity-50 cursor-pointer"
+              >
+                {isNotarizingWeb3 ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin text-amber-300" />
+                    <span>MetaMask Signing...</span>
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="h-4 w-4 text-emerald-300" />
+                    <span>Simpan ke Blockchain Sepolia (MetaMask)</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {web3Status && (
+              <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                  <span>{web3Status}</span>
+                </div>
+                <a
+                  href={`https://sepolia.etherscan.io/tx/${currentDecision.onChainBlock.txHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cyan-400 hover:underline text-[11px] font-bold flex items-center gap-1"
+                >
+                  <span>Cek Transaksi di Sepolia Etherscan ↗</span>
+                </a>
+              </div>
+            )}
+
+            {web3Error && (
+              <div className="p-2.5 rounded-lg bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-mono flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-rose-400 shrink-0" />
+                <span>{web3Error}</span>
+              </div>
+            )}
           </div>
 
           {/* Rationale & Facts Grid */}

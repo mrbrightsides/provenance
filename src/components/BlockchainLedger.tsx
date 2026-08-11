@@ -12,13 +12,22 @@ import {
   Check,
   RotateCcw,
   GitCommit,
+  Wallet,
+  Loader2,
+  AlertTriangle,
 } from 'lucide-react';
 import { DecisionRecord } from '../types';
+import {
+  isMetaMaskInstalled,
+  notarizeOnSepoliaWithMetaMask,
+  applyWeb3TxToRecord,
+} from '../utils/web3Provider';
 
 interface BlockchainLedgerProps {
   records: DecisionRecord[];
   onTestTamper: (record: DecisionRecord) => void;
   onResetLedger: () => void;
+  onRecordUpdated?: (updatedRecord: DecisionRecord) => void;
   selectedBlockId?: string;
 }
 
@@ -26,6 +35,7 @@ export const BlockchainLedger: React.FC<BlockchainLedgerProps> = ({
   records,
   onTestTamper,
   onResetLedger,
+  onRecordUpdated,
   selectedBlockId,
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -35,7 +45,45 @@ export const BlockchainLedger: React.FC<BlockchainLedgerProps> = ({
   const [copiedHash, setCopiedHash] = useState<string | null>(null);
   const [viewJsonModal, setViewJsonModal] = useState<boolean>(false);
 
+  // Web3 Notarization State for Ledger
+  const [isNotarizingWeb3, setIsNotarizingWeb3] = useState<boolean>(false);
+  const [web3Status, setWeb3Status] = useState<string | null>(null);
+  const [web3Error, setWeb3Error] = useState<string | null>(null);
+
   const activeRecord = records.find((r) => r.id === activeRecordId) || records[0];
+
+  const handleNotarizeRecordWithMetaMask = async () => {
+    if (!activeRecord) return;
+
+    if (!isMetaMaskInstalled()) {
+      setWeb3Error(
+        'MetaMask extension is not installed. Please install MetaMask from https://metamask.io to sign on-chain transactions.'
+      );
+      return;
+    }
+
+    setIsNotarizingWeb3(true);
+    setWeb3Error(null);
+    setWeb3Status('Connecting to MetaMask & verifying Sepolia network...');
+
+    try {
+      const result = await notarizeOnSepoliaWithMetaMask(activeRecord);
+      const updatedRecord = applyWeb3TxToRecord(activeRecord, result);
+      if (onRecordUpdated) {
+        onRecordUpdated(updatedRecord);
+      }
+      setWeb3Status(`Successfully notarized on Sepolia! Tx: ${result.txHash.substring(0, 14)}...`);
+    } catch (err: any) {
+      console.error('MetaMask notarization error:', err);
+      if (err.code === 4001 || err?.message?.includes('user rejected')) {
+        setWeb3Error('Transaction request was rejected in MetaMask.');
+      } else {
+        setWeb3Error(err.message || 'Error signing transaction on Sepolia.');
+      }
+    } finally {
+      setIsNotarizingWeb3(false);
+    }
+  };
 
   const filteredRecords = records.filter(
     (r) =>
@@ -182,6 +230,52 @@ export const BlockchainLedger: React.FC<BlockchainLedgerProps> = ({
                   </button>
                 </div>
               </div>
+
+              {/* MetaMask Web3 Store Bar */}
+              <div className="p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-500/40 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="flex items-center space-x-2.5 text-xs text-indigo-200">
+                  <Wallet className="h-4 w-4 text-indigo-400 shrink-0" />
+                  <span>Execute on-chain smart contract notarization via MetaMask:</span>
+                </div>
+                <button
+                  onClick={handleNotarizeRecordWithMetaMask}
+                  disabled={isNotarizingWeb3}
+                  className="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 shadow transition-all shrink-0 active:scale-95 disabled:opacity-50 cursor-pointer"
+                >
+                  {isNotarizingWeb3 ? (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin text-amber-300" />
+                      <span>Signing MetaMask...</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShieldCheck className="h-3.5 w-3.5 text-emerald-300" />
+                      <span>Sign & Notarize (MetaMask)</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {web3Status && (
+                <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center justify-between">
+                  <span>{web3Status}</span>
+                  <a
+                    href={`https://sepolia.etherscan.io/tx/${activeRecord.onChainBlock.txHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cyan-400 hover:underline text-[11px] font-bold"
+                  >
+                    Verify on Sepolia Etherscan ↗
+                  </a>
+                </div>
+              )}
+
+              {web3Error && (
+                <div className="p-2.5 rounded-lg bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-mono flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-rose-400 shrink-0" />
+                  <span>{web3Error}</span>
+                </div>
+              )}
 
               {/* On-Chain Header Table */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">

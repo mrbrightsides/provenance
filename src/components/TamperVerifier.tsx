@@ -14,6 +14,7 @@ import {
   Info,
 } from 'lucide-react';
 import { DecisionRecord, Dataset, VerificationResult, FieldDiff } from '../types';
+import { verifyClientDataset } from '../utils/clientAgentEngine';
 
 interface TamperVerifierProps {
   records: DecisionRecord[];
@@ -107,21 +108,31 @@ export const TamperVerifier: React.FC<TamperVerifierProps> = ({ records, initial
     setErrorMsg(null);
 
     try {
-      const res = await fetch('/api/agent/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          decisionId: selectedRecord.id,
-          currentDataset: workingDataset,
-        }),
-      });
+      let data: any = null;
+      try {
+        const res = await fetch('/api/agent/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            decisionId: selectedRecord.id,
+            currentDataset: workingDataset,
+          }),
+        });
 
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Failed to verify dataset');
+        const contentType = res.headers.get('content-type');
+        if (res.ok && contentType && contentType.includes('application/json')) {
+          data = await res.json();
+        }
+      } catch (fetchErr) {
+        console.warn('API route unreachable, executing client-side verification engine...');
       }
 
-      setVerificationResult(data.result);
+      if (data && data.success && data.result) {
+        setVerificationResult(data.result);
+      } else {
+        const clientResult = await verifyClientDataset(selectedRecord, workingDataset);
+        setVerificationResult(clientResult);
+      }
     } catch (err: any) {
       console.error(err);
       setErrorMsg(err.message || 'Error executing verification agent');

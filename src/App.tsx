@@ -7,6 +7,7 @@ import { AuditCertificate } from './components/AuditCertificate';
 import { SmartContractViewer } from './components/SmartContractViewer';
 import { PitchDeckModal } from './components/PitchDeckModal';
 import { DecisionRecord } from './types';
+import { getClientSeedLedger } from './utils/clientAgentEngine';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'workspace' | 'ledger' | 'verifier' | 'certificate' | 'contract'>('workspace');
@@ -15,16 +16,23 @@ export default function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPitchDeckOpen, setIsPitchDeckOpen] = useState<boolean>(false);
 
-  // Fetch initial on-chain records from server
+  // Fetch initial on-chain records from server with browser client fallback
   const fetchLedger = async () => {
     try {
       const res = await fetch('/api/blockchain/ledger');
-      const data = await res.json();
-      if (data.success && data.records) {
-        setRecords(data.records);
+      const contentType = res.headers.get('content-type');
+      if (res.ok && contentType && contentType.includes('application/json')) {
+        const data = await res.json();
+        if (data.success && data.records && data.records.length > 0) {
+          setRecords(data.records);
+          return;
+        }
       }
+      throw new Error('Server API unavailable or returned non-JSON response');
     } catch (err) {
-      console.error('Failed to fetch ledger:', err);
+      console.warn('Backend server unavailable, loading client-side seed ledger fallback...');
+      const seedRecords = await getClientSeedLedger();
+      setRecords(seedRecords);
     } finally {
       setIsLoading(false);
     }
@@ -56,14 +64,21 @@ export default function App() {
   const handleResetLedger = async () => {
     try {
       const res = await fetch('/api/blockchain/reset', { method: 'POST' });
-      const data = await res.json();
-      if (data.success && data.records) {
-        setRecords(data.records);
-        setSelectedRecordId(data.records[0]?.id);
+      const contentType = res.headers.get('content-type');
+      if (res.ok && contentType && contentType.includes('application/json')) {
+        const data = await res.json();
+        if (data.success && data.records) {
+          setRecords(data.records);
+          setSelectedRecordId(data.records[0]?.id);
+          return;
+        }
       }
     } catch (err) {
-      console.error('Failed to reset ledger:', err);
+      console.warn('Backend reset unavailable, resetting client seed ledger...');
     }
+    const seedRecords = await getClientSeedLedger();
+    setRecords(seedRecords);
+    setSelectedRecordId(seedRecords[0]?.id);
   };
 
   return (

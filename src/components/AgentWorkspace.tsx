@@ -26,6 +26,7 @@ import {
 import { Dataset, UseCaseType, DecisionRecord, AgentStep, DataMetric, EntityRecord } from '../types';
 import { PROCUREMENT_PRESET, MEDICAL_PRESET, LOAN_PRESET } from '../data/presets';
 import { MathScoringExplainer } from './MathScoringExplainer';
+import { executeClientAgentWorkflow } from '../utils/clientAgentEngine';
 
 const CUSTOM_CLOUD_PRESET: Dataset = {
   id: 'ds-custom-cloud-01',
@@ -289,25 +290,41 @@ export const AgentWorkspace: React.FC<AgentWorkspaceProps> = ({
     setSteps(initialSteps);
 
     try {
-      const res = await fetch('/api/agent/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          useCase: selectedUseCase,
-          dataset,
-          customInstructions,
-        }),
-      });
+      let data: any = null;
+      try {
+        const res = await fetch('/api/agent/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            useCase: selectedUseCase,
+            dataset,
+            customInstructions,
+          }),
+        });
 
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Failed to execute agent workflow');
+        const contentType = res.headers.get('content-type');
+        if (res.ok && contentType && contentType.includes('application/json')) {
+          data = await res.json();
+        }
+      } catch (fetchErr) {
+        console.warn('API route unreachable, falling back to browser client execution engine...');
       }
 
-      setSteps(data.steps);
-      setCurrentDecision(data.record);
-      onDecisionCreated(data.record);
+      if (data && data.success && data.record) {
+        setSteps(data.steps);
+        setCurrentDecision(data.record);
+        onDecisionCreated(data.record);
+      } else {
+        // Run browser client engine
+        const clientResult = await executeClientAgentWorkflow(
+          selectedUseCase,
+          dataset,
+          customInstructions
+        );
+        setSteps(clientResult.steps);
+        setCurrentDecision(clientResult.record);
+        onDecisionCreated(clientResult.record);
+      }
     } catch (err: any) {
       console.error(err);
       setErrorMsg(err.message || 'Error running agent');

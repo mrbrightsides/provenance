@@ -390,7 +390,17 @@ export const TamperVerifier: React.FC<TamperVerifierProps> = ({ records, initial
           {/* Hash Comparison Box */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
             <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase block">Original On-Chain Notarized Hash</span>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-slate-400 uppercase block">Original On-Chain Notarized Hash</span>
+                <a
+                  href={`https://sepolia.etherscan.io/tx/${selectedRecord.onChainBlock.txHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] text-cyan-400 hover:underline flex items-center gap-1 font-sans"
+                >
+                  <span>Sepolia Etherscan ↗</span>
+                </a>
+              </div>
               <div className="text-emerald-400 text-[11px] break-all font-bold">
                 0x{verificationResult.originalDatasetHash}
               </div>

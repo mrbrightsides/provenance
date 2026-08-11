@@ -155,6 +155,16 @@ export const BlockchainLedger: React.FC<BlockchainLedgerProps> = ({
                 </div>
 
                 <div className="flex items-center space-x-2">
+                  <a
+                    href={`https://sepolia.etherscan.io/tx/${activeRecord.onChainBlock.txHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg shadow-indigo-600/20"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    <span>Sepolia Etherscan ↗</span>
+                  </a>
+
                   <button
                     onClick={() => onTestTamper(activeRecord)}
                     className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-600/20"
@@ -176,9 +186,17 @@ export const BlockchainLedger: React.FC<BlockchainLedgerProps> = ({
               {/* On-Chain Header Table */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
                 <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
-                  <span className="text-[10px] text-slate-400 uppercase block">Contract Address (CA)</span>
-                  <div className="flex items-center justify-between text-indigo-400 font-mono text-[11px] break-all font-bold">
-                    <span>{activeRecord.onChainBlock.contractAddress || '0xC442ce42A6763e25664147b088DbD50B01C375e5'}</span>
+                  <span className="text-[10px] text-slate-400 uppercase block">Contract Address (CA - Sepolia)</span>
+                  <div className="flex items-center justify-between font-mono text-[11px] break-all font-bold">
+                    <a
+                      href={`https://sepolia.etherscan.io/address/${activeRecord.onChainBlock.contractAddress || '0xC442ce42A6763e25664147b088DbD50B01C375e5'}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-indigo-400 hover:text-indigo-300 hover:underline flex items-center gap-1"
+                    >
+                      <span>{activeRecord.onChainBlock.contractAddress || '0xC442ce42A6763e25664147b088DbD50B01C375e5'}</span>
+                      <ExternalLink className="h-3 w-3 shrink-0 text-indigo-400" />
+                    </a>
                     <button
                       onClick={() => handleCopy(activeRecord.onChainBlock.contractAddress || '0xC442ce42A6763e25664147b088DbD50B01C375e5')}
                       className="ml-2 p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-white"
@@ -193,9 +211,17 @@ export const BlockchainLedger: React.FC<BlockchainLedgerProps> = ({
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
-                  <span className="text-[10px] text-slate-400 uppercase block">Transaction Hash</span>
-                  <div className="flex items-center justify-between text-cyan-400 text-[11px] break-all">
-                    <span>{activeRecord.onChainBlock.txHash}</span>
+                  <span className="text-[10px] text-slate-400 uppercase block">Transaction Hash (Sepolia Etherscan)</span>
+                  <div className="flex items-center justify-between text-[11px] break-all font-bold">
+                    <a
+                      href={`https://sepolia.etherscan.io/tx/${activeRecord.onChainBlock.txHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-400 hover:text-cyan-300 hover:underline flex items-center gap-1"
+                    >
+                      <span>{activeRecord.onChainBlock.txHash}</span>
+                      <ExternalLink className="h-3 w-3 shrink-0 text-cyan-400" />
+                    </a>
                     <button
                       onClick={() => handleCopy(activeRecord.onChainBlock.txHash)}
                       className="ml-2 p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-white"

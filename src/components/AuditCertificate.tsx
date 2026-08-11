@@ -6,9 +6,9 @@ import {
   CheckCircle2,
   Lock,
   Layers,
-  QrCode,
   Download,
   Share2,
+  ExternalLink,
 } from 'lucide-react';
 import { DecisionRecord } from '../types';
 
@@ -36,6 +36,10 @@ export const AuditCertificate: React.FC<AuditCertificateProps> = ({ records, ini
     );
   }
 
+  const etherscanTxUrl = `https://sepolia.etherscan.io/tx/${record.onChainBlock.txHash}`;
+  const etherscanContractUrl = `https://sepolia.etherscan.io/address/${record.onChainBlock.contractAddress || '0xC442ce42A6763e25664147b088DbD50B01C375e5'}`;
+  const qrCodeImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(etherscanTxUrl)}`;
+
   return (
     <div className="space-y-8 pb-12">
       {/* Top Controls */}
@@ -46,7 +50,7 @@ export const AuditCertificate: React.FC<AuditCertificateProps> = ({ records, ini
             <h2 className="text-xl font-bold text-white tracking-tight">Verifiable Decision Audit Certificate</h2>
           </div>
           <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-            Official cryptographic attestation certificate for regulatory compliance, enterprise procurement audits, or legal proof of reasoning.
+            Official cryptographic attestation certificate for regulatory compliance, enterprise procurement audits, or legal proof of reasoning notarized on Sepolia Testnet.
           </p>
         </div>
 
@@ -62,6 +66,16 @@ export const AuditCertificate: React.FC<AuditCertificateProps> = ({ records, ini
               </option>
             ))}
           </select>
+
+          <a
+            href={etherscanTxUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg shadow-indigo-600/20"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            <span>Verify on Sepolia Etherscan</span>
+          </a>
 
           <button
             onClick={handlePrint}
@@ -184,21 +198,56 @@ export const AuditCertificate: React.FC<AuditCertificateProps> = ({ records, ini
               </div>
 
               <div>
-                <span className="text-[9px] text-slate-400 uppercase block print:text-gray-600">Transaction Hash</span>
-                <span className="text-slate-300 break-all text-[10px] print:text-black">
-                  {record.onChainBlock.txHash}
-                </span>
+                <span className="text-[9px] text-slate-400 uppercase block print:text-gray-600">Sepolia Contract</span>
+                <a
+                  href={etherscanContractUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-300 hover:text-indigo-200 hover:underline break-all text-[10px] flex items-center gap-1 mt-0.5 print:text-indigo-800"
+                >
+                  <span>{record.onChainBlock.contractAddress || '0xC442ce42A6763e25664147b088DbD50B01C375e5'}</span>
+                  <ExternalLink className="h-2.5 w-2.5 shrink-0" />
+                </a>
+              </div>
+
+              <div>
+                <span className="text-[9px] text-slate-400 uppercase block print:text-gray-600">Sepolia Tx Hash</span>
+                <a
+                  href={etherscanTxUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cyan-400 hover:text-cyan-300 hover:underline break-all text-[10px] flex items-center gap-1 mt-0.5 font-bold print:text-blue-800"
+                >
+                  <span>{record.onChainBlock.txHash}</span>
+                  <ExternalLink className="h-2.5 w-2.5 shrink-0" />
+                </a>
               </div>
             </div>
 
-            {/* Simulated QR Code Seal */}
-            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center justify-center space-y-2 text-center print:bg-gray-50 print:border-gray-200">
-              <div className="h-24 w-24 bg-white p-2 rounded-xl flex items-center justify-center shadow-md">
-                <QrCode className="h-20 w-20 text-slate-950" />
+            {/* Dynamic QR Code Seal pointing to Sepolia Etherscan */}
+            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center justify-center space-y-3 text-center print:bg-gray-50 print:border-gray-200">
+              <div className="h-28 w-28 bg-white p-2 rounded-xl flex items-center justify-center shadow-md">
+                <img
+                  src={qrCodeImageUrl}
+                  alt="Sepolia Etherscan QR Code"
+                  className="h-24 w-24 object-contain"
+                  loading="lazy"
+                />
               </div>
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider print:text-gray-700">
-                Scan to Verify On-Chain
-              </span>
+              <div>
+                <span className="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider block print:text-amber-800">
+                  Scan QR to Verify on Sepolia
+                </span>
+                <a
+                  href={etherscanTxUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[10px] text-cyan-400 hover:underline font-mono mt-1 print:text-blue-800"
+                >
+                  <span>sepolia.etherscan.io</span>
+                  <ExternalLink className="h-2.5 w-2.5" />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -208,11 +257,11 @@ export const AuditCertificate: React.FC<AuditCertificateProps> = ({ records, ini
         <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-mono text-slate-500 print:text-gray-600">
           <div>
             PROVENANCE AI • Decentralized Decision Ledger Layer 1 <br />
-            Attestation Notarized at {record.timestamp}
+            Attestation Notarized on Sepolia Testnet at {record.timestamp}
           </div>
           <div className="text-right">
             Verification Protocol: SHA-256 / Merkle Tree L1 <br />
-            Status: <span className="text-emerald-400 font-bold print:text-emerald-800">VALIDATED & AUDITED</span>
+            Status: <span className="text-emerald-400 font-bold print:text-emerald-800">VALIDATED & AUDITED ON-CHAIN</span>
           </div>
         </div>
 

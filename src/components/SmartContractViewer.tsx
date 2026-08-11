@@ -195,6 +195,16 @@ export const SmartContractViewer: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-2">
+            <a
+              href={`https://sepolia.etherscan.io/address/${DEPLOYED_CONTRACT_ADDRESS}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg shadow-indigo-600/20 transition-all"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              <span>Sepolia Etherscan ↗</span>
+            </a>
+
             <button
               onClick={handleCopyAddress}
               className="px-3.5 py-2 rounded-xl bg-slate-950 border border-indigo-500/40 hover:border-indigo-400 text-slate-200 font-mono text-xs flex items-center gap-2 transition-all"

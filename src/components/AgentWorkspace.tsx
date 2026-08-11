@@ -760,6 +760,16 @@ export const AgentWorkspace: React.FC<AgentWorkspaceProps> = ({
             </div>
 
             <div className="flex items-center space-x-3">
+              <a
+                href={`https://sepolia.etherscan.io/tx/${currentDecision.onChainBlock.txHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-lg shadow-indigo-600/20"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                <span>Verify on Sepolia Etherscan</span>
+              </a>
+
               <button
                 onClick={() => onTestTamper(currentDecision)}
                 className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center gap-2 shadow-lg shadow-emerald-600/20"
@@ -866,10 +876,31 @@ export const AgentWorkspace: React.FC<AgentWorkspaceProps> = ({
                   </span>
                 </div>
 
-                <div className="pt-2 border-t border-slate-800/80">
-                  <div className="text-[10px] text-slate-400">Transaction Hash</div>
-                  <div className="text-[10px] text-slate-200 break-all">
-                    {currentDecision.onChainBlock.txHash}
+                <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
+                  <div>
+                    <span className="text-[10px] text-slate-400 uppercase block">Sepolia Smart Contract</span>
+                    <a
+                      href={`https://sepolia.etherscan.io/address/${currentDecision.onChainBlock.contractAddress || '0xC442ce42A6763e25664147b088DbD50B01C375e5'}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] text-indigo-300 hover:text-indigo-200 hover:underline break-all flex items-center gap-1 font-mono"
+                    >
+                      <span>{currentDecision.onChainBlock.contractAddress || '0xC442ce42A6763e25664147b088DbD50B01C375e5'}</span>
+                      <ExternalLink className="h-2.5 w-2.5 shrink-0" />
+                    </a>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] text-slate-400 uppercase block">Sepolia Tx Hash</span>
+                    <a
+                      href={`https://sepolia.etherscan.io/tx/${currentDecision.onChainBlock.txHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] text-cyan-400 hover:text-cyan-300 hover:underline break-all font-bold flex items-center gap-1 font-mono"
+                    >
+                      <span>{currentDecision.onChainBlock.txHash}</span>
+                      <ExternalLink className="h-2.5 w-2.5 shrink-0" />
+                    </a>
                   </div>
                 </div>
               </div>

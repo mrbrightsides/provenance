@@ -149,9 +149,15 @@ export const PitchDeckModal: React.FC<PitchDeckModalProps> = ({
                     <ExternalLink className="h-3 w-3" />
                     <span>GitHub: mrbrightsides/provenance</span>
                   </a>
-                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    EVM Smart Contract Deployed
-                  </span>
+                  <a
+                    href="https://sepolia.etherscan.io/address/0xC442ce42A6763e25664147b088DbD50B01C375e5#code"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    <span>EVM Smart Contract Deployed</span>
+                  </a>
                 </div>
               </div>
 
@@ -176,7 +182,7 @@ export const PitchDeckModal: React.FC<PitchDeckModalProps> = ({
                   <Database className="h-6 w-6 text-indigo-400" />
                   <h4 className="text-xs font-bold text-white">On-Chain Immutable Ledger</h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Notarizes immutable proofs to EVM Smart Contract <code className="text-indigo-300">0xC442...375e5</code> for auditability.
+                    Notarizes immutable proofs to Ethereum Virtual Machine Smart Contract <code className="text-indigo-300">0xC442...375e5</code> for auditability.
                   </p>
                 </div>
               </div>
@@ -230,7 +236,7 @@ export const PitchDeckModal: React.FC<PitchDeckModalProps> = ({
                     <span>Data Sovereignty Violations</span>
                   </h3>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Storing raw confidential data directly on public blockchains violates enterprise privacy rules (GDPR / HIPAA / Banking secrecy).
+                    Storing raw confidential data directly on public blockchains violates enterprise privacy rules (GDPR / HIPAA / Banking secrecy / and other credential rules applied from each countries).
                   </p>
                 </div>
               </div>
@@ -319,6 +325,7 @@ export const PitchDeckModal: React.FC<PitchDeckModalProps> = ({
                     <li>• Node.js native SHA-256 hash generation</li>
                     <li>• Merkle Tree root construction & proof generation</li>
                     <li>• Forensic field-level diff analyzer for tamper detection</li>
+                    <li>• Keeping raw confidential business datasets secure off-chain.</li>
                   </ul>
                 </div>
 

@@ -1,0 +1,6 @@
+{
+  "name": "Provenance AI",
+  "description": "Verifiable AI Agent Decision System with Tamper-Evident Cryptographic & Blockchain Verification Layers",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

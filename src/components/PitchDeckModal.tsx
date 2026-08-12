@@ -51,6 +51,11 @@ export const PitchDeckModal: React.FC<PitchDeckModalProps> = ({
       subtitle: 'Cryptographic memory layer & tamper-evident audit ledger for AI Agents',
     },
     {
+      id: 'why-blockchain',
+      title: 'Why Blockchain? (Database vs. EVM)',
+      subtitle: 'Why centralized databases fail for AI audit trails and why public EVM is mathematically required',
+    },
+    {
       id: 'architecture',
       title: 'System Architecture & Web3 Stack',
       subtitle: 'Gemini 3.6 Multi-Agent Engine + EVM Solidity Ledger + Cryptographic Hashing',
@@ -279,8 +284,85 @@ export const PitchDeckModal: React.FC<PitchDeckModalProps> = ({
             </div>
           )}
 
-          {/* SLIDE 4: ARCHITECTURE */}
+          {/* SLIDE 4: WHY BLOCKCHAIN */}
           {activeSlide === 3 && (
+            <div className="space-y-5 animate-fade-in">
+              <div>
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                  <Database className="h-5 w-5 text-indigo-400" />
+                  <span>Why Blockchain? (Centralized Database vs. Public EVM)</span>
+                </h2>
+                <p className="text-xs text-slate-400 mt-1">
+                  Why saving hashes in PostgreSQL or AWS S3 provides ZERO non-repudiation, and why public EVM is mathematically essential.
+                </p>
+              </div>
+
+              {/* Side-by-side Comparison Table */}
+              <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
+                <table className="w-full text-left text-xs font-mono">
+                  <thead className="bg-slate-900/80 text-slate-400 text-[11px] uppercase border-b border-slate-800">
+                    <tr>
+                      <th className="p-3">Evaluation Dimension</th>
+                      <th className="p-3 text-rose-400">Centralized DB (Postgres / S3)</th>
+                      <th className="p-3 text-emerald-400">PROVENANCE AI + EVM Blockchain</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60 text-slate-300 text-[11px]">
+                    <tr className="hover:bg-slate-900/30">
+                      <td className="p-3 font-bold text-white">Admin Tamper Vulnerability</td>
+                      <td className="p-3 text-rose-300">
+                        ❌ DB Admin / Hacker can rewrite both logs and SHA hashes retroactively with 0 trace
+                      </td>
+                      <td className="p-3 text-emerald-300 font-bold">
+                        ✅ 100% Immutable: No admin, CEO, or server owner can alter confirmed EVM blocks
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-slate-900/30">
+                      <td className="p-3 font-bold text-white">Timestamp Trust & Authority</td>
+                      <td className="p-3 text-rose-300">
+                        ❌ Server clock can be modified, spoofed, or manipulated
+                      </td>
+                      <td className="p-3 text-emerald-300">
+                        ✅ Consensus Timestamp verified by thousands of independent decentralized nodes
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-slate-900/30">
+                      <td className="p-3 font-bold text-white">Legal Non-Repudiation in Court</td>
+                      <td className="p-3 text-rose-300">
+                        ❌ Rejected by auditors as self-reported internal data
+                      </td>
+                      <td className="p-3 text-emerald-300">
+                        ✅ Legally defensible cryptographic proof anchored on public Ethereum/Sepolia
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-slate-900/30">
+                      <td className="p-3 font-bold text-white">Data Privacy & Compliance</td>
+                      <td className="p-3 text-rose-300">
+                        ⚠️ Storing raw PII on server risks leaks or unauthorized admin viewing
+                      </td>
+                      <td className="p-3 text-emerald-300">
+                        ✅ Zero Data Leakage: Raw data stays private off-chain; only 32-byte Merkle root on-chain
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Callout box */}
+              <div className="p-3.5 rounded-xl bg-gradient-to-r from-indigo-950/80 to-purple-950/80 border border-indigo-500/40 text-xs text-indigo-200 space-y-1">
+                <span className="font-bold text-indigo-300 flex items-center gap-1.5">
+                  <Sparkles className="h-4 w-4 text-amber-400" />
+                  Key Takeaway:
+                </span>
+                <p className="text-[11px] leading-relaxed text-slate-300">
+                  A hash stored in a database you control proves nothing to an auditor. Blockchain is NOT an aesthetic gimmick here — it is the <strong>only cryptographic trust anchor</strong> that guarantees an AI decision made at 10:00 AM cannot be silently altered at 10:05 AM by an insider.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* SLIDE 5: ARCHITECTURE */}
+          {activeSlide === 4 && (
             <div className="space-y-6 animate-fade-in">
               <div>
                 <h2 className="text-xl font-bold text-white">Full-Stack Technical Architecture</h2>
@@ -345,8 +427,8 @@ export const PitchDeckModal: React.FC<PitchDeckModalProps> = ({
             </div>
           )}
 
-          {/* SLIDE 5: CONTRACT */}
-          {activeSlide === 4 && (
+          {/* SLIDE 6: CONTRACT */}
+          {activeSlide === 5 && (
             <div className="space-y-6 animate-fade-in">
               <div>
                 <h2 className="text-xl font-bold text-white">Live Smart Contract Artifacts</h2>

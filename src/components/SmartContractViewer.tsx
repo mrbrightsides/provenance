@@ -268,7 +268,7 @@ export const SmartContractViewer: React.FC = () => {
             </h2>
           </div>
           <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-            Solidity smart contract resmi untuk PROVENANCE AI Layer 1. Kontrak ini menyimpan hash SHA-256 data, bukti origin, alasan keputusan AI, dan Merkle Root secara permanen di blockchain EVM.
+            Official Solidity smart contract for PROVENANCE AI Layer 1. This contract permanently stores dataset SHA-256 hashes, origin evidence, AI decision rationales, and Merkle Roots on the EVM blockchain.
           </p>
         </div>
 
@@ -308,7 +308,7 @@ export const SmartContractViewer: React.FC = () => {
         <div className="lg:col-span-1 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
           <h3 className="text-sm font-bold font-mono text-cyan-400 uppercase tracking-wider flex items-center gap-2">
             <BookOpen className="h-4 w-4" />
-            <span>Panduan Deploy di Remix IDE</span>
+            <span>Remix IDE Deployment Guide</span>
           </h3>
 
           <ol className="space-y-4 text-xs text-slate-300">
@@ -317,8 +317,8 @@ export const SmartContractViewer: React.FC = () => {
                 1
               </span>
               <div>
-                <strong className="text-white block">Salin Kode Solidity</strong>
-                Klik tombol <span className="text-indigo-400 font-mono">Copy Solidity Code</span> di atas.
+                <strong className="text-white block">Copy Solidity Code</strong>
+                Click the <span className="text-indigo-400 font-mono">Copy Solidity Code</span> button above.
               </div>
             </li>
 
@@ -327,8 +327,8 @@ export const SmartContractViewer: React.FC = () => {
                 2
               </span>
               <div>
-                <strong className="text-white block">Buka Remix IDE</strong>
-                Buka <a href="https://remix.ethereum.org" target="_blank" rel="noreferrer" className="text-cyan-400 underline">remix.ethereum.org</a> di tab browser baru.
+                <strong className="text-white block">Open Remix IDE</strong>
+                Open <a href="https://remix.ethereum.org" target="_blank" rel="noreferrer" className="text-cyan-400 underline">remix.ethereum.org</a> in a new browser tab.
               </div>
             </li>
 
@@ -337,8 +337,8 @@ export const SmartContractViewer: React.FC = () => {
                 3
               </span>
               <div>
-                <strong className="text-white block">Buat File `ProvenanceLedger.sol`</strong>
-                Di Remix File Explorer, buat file baru di folder <code className="text-amber-300 font-mono">contracts/</code> dengan nama <code className="text-amber-300 font-mono">ProvenanceLedger.sol</code> lalu paste kodenya.
+                <strong className="text-white block">Create File `ProvenanceLedger.sol`</strong>
+                In the Remix File Explorer, create a new file in the <code className="text-amber-300 font-mono">contracts/</code> folder named <code className="text-amber-300 font-mono">ProvenanceLedger.sol</code> and paste the code.
               </div>
             </li>
 
@@ -348,7 +348,7 @@ export const SmartContractViewer: React.FC = () => {
               </span>
               <div>
                 <strong className="text-white block">Compile Smart Contract</strong>
-                Pindah ke tab <strong className="text-white">Solidity Compiler</strong> (ikon ke-3 di kiri), pilih compiler version <code className="text-emerald-300 font-mono">0.8.20</code> atau lebih baru, lalu klik <strong className="text-emerald-400">Compile ProvenanceLedger.sol</strong>.
+                Switch to the <strong className="text-white">Solidity Compiler</strong> tab (3rd icon on the left), select compiler version <code className="text-emerald-300 font-mono">0.8.20</code> or newer, then click <strong className="text-emerald-400">Compile ProvenanceLedger.sol</strong>.
               </div>
             </li>
 
@@ -357,23 +357,26 @@ export const SmartContractViewer: React.FC = () => {
                 5
               </span>
               <div>
-                <strong className="text-white block">Deploy ke Network</strong>
-                Pindah ke tab <strong className="text-white">Deploy & Run Transactions</strong>.
+                <strong className="text-white block">Deploy to Network</strong>
+                Switch to the <strong className="text-white">Deploy & Run Transactions</strong> tab.
                 <ul className="list-disc list-inside mt-1 text-slate-400 space-y-1">
-                  <li>Gunakan <code className="text-cyan-300">Remix VM (Cancun)</code> untuk pengujian lokal instan.</li>
-                  <li>Atau pilih <code className="text-cyan-300">Injected Provider - MetaMask</code> untuk deploy ke Sepolia / Polygon testnet.</li>
+                  <li>Use <code className="text-cyan-300">Remix VM (Cancun)</code> for instant local testing.</li>
+                  <li>Or select <code className="text-cyan-300">Injected Provider - MetaMask</code> to deploy to Sepolia / Polygon testnet.</li>
                 </ul>
               </div>
             </li>
           </ol>
 
-          <div className="p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-800/60 text-xs text-indigo-200 space-y-1">
+          <div className="p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-800/60 text-xs text-indigo-200 space-y-1.5">
             <div className="font-semibold text-indigo-300 flex items-center gap-1.5">
               <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
-              <span>Mengapa Harus On-Chain?</span>
+              <span>Why On-Chain Notarization vs. Centralized Database?</span>
             </div>
             <p className="text-[11px] leading-relaxed text-slate-300">
-              Dengan smart contract ini, tidak ada satu orang pun (bahkan admin server sekalipun) yang dapat mengubah histori keputusan AI setelah dinotariskan.
+              Saving audit hashes in a standard SQL database or AWS S3 bucket provides zero non-repudiation because server administrators can silently rewrite both raw data and hashes. 
+            </p>
+            <p className="text-[11px] leading-relaxed text-slate-300">
+              By notarizing Merkle Roots on the public EVM blockchain, we guarantee an unalterable, globally timestamped truth anchor that no admin, hacker, or corporate entity can retroactively alter.
             </p>
           </div>
         </div>

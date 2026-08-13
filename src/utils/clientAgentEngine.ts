@@ -264,7 +264,7 @@ export async function executeClientAgentWorkflow(
       (await browserSha256('proof-2')).substring(0, 64),
     ],
     timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC',
-    network: 'EVM L1 Mainnet',
+    network: 'EVM L1 Testnet',
     nonce: Math.floor(Math.random() * 10000),
     gasUsed: 42100,
   };

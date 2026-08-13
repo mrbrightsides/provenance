@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
+import { LandingPage } from './components/LandingPage';
 import { AgentWorkspace } from './components/AgentWorkspace';
 import { BlockchainLedger } from './components/BlockchainLedger';
 import { TamperVerifier } from './components/TamperVerifier';
 import { AuditCertificate } from './components/AuditCertificate';
 import { SmartContractViewer } from './components/SmartContractViewer';
+import { AboutTab } from './components/AboutTab';
 import { PitchDeckModal } from './components/PitchDeckModal';
 import { DecisionRecord } from './types';
 import { getClientSeedLedger } from './utils/clientAgentEngine';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'workspace' | 'ledger' | 'verifier' | 'certificate' | 'contract'>('workspace');
+  const [activeTab, setActiveTab] = useState<'landing' | 'workspace' | 'ledger' | 'verifier' | 'certificate' | 'contract' | 'about'>('landing');
   const [records, setRecords] = useState<DecisionRecord[]>([]);
   const [selectedRecordId, setSelectedRecordId] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -110,6 +112,17 @@ export default function App() {
           </div>
         ) : (
           <>
+            {activeTab === 'landing' && (
+              <LandingPage
+                onLaunchWorkspace={() => setActiveTab('workspace')}
+                onExploreLedger={() => setActiveTab('ledger')}
+                onLaunchVerifier={() => setActiveTab('verifier')}
+                onViewContract={() => setActiveTab('contract')}
+                onOpenPitchDeck={() => setIsPitchDeckOpen(true)}
+                recentRecords={records}
+              />
+            )}
+
             {activeTab === 'workspace' && (
               <AgentWorkspace
                 onDecisionCreated={handleDecisionCreated}
@@ -138,6 +151,10 @@ export default function App() {
 
             {activeTab === 'contract' && (
               <SmartContractViewer />
+            )}
+
+            {activeTab === 'about' && (
+              <AboutTab />
             )}
           </>
         )}

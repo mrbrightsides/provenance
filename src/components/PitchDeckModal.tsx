@@ -22,7 +22,7 @@ import { DEPLOYED_CONTRACT_ADDRESS } from '../contracts/contractConfig';
 interface PitchDeckModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onNavigateToTab: (tab: 'workspace' | 'ledger' | 'verifier' | 'certificate' | 'contract') => void;
+  onNavigateToTab: (tab: 'landing' | 'workspace' | 'ledger' | 'verifier' | 'certificate' | 'contract' | 'about') => void;
 }
 
 export const PitchDeckModal: React.FC<PitchDeckModalProps> = ({

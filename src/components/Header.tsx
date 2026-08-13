@@ -1,9 +1,9 @@
 import React from 'react';
-import { ShieldCheck, Cpu, Database, CheckCircle2, FileText, Activity, Code2, Trophy, Github } from 'lucide-react';
+import { ShieldCheck, Cpu, Database, CheckCircle2, FileText, Activity, Code2, Trophy, Github, Home, User } from 'lucide-react';
 
 interface HeaderProps {
-  activeTab: 'workspace' | 'ledger' | 'verifier' | 'certificate' | 'contract';
-  setActiveTab: (tab: 'workspace' | 'ledger' | 'verifier' | 'certificate' | 'contract') => void;
+  activeTab: 'landing' | 'workspace' | 'ledger' | 'verifier' | 'certificate' | 'contract' | 'about';
+  setActiveTab: (tab: 'landing' | 'workspace' | 'ledger' | 'verifier' | 'certificate' | 'contract' | 'about') => void;
   recordCount: number;
   onOpenPitchDeck?: () => void;
 }
@@ -14,14 +14,17 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, recordC
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between py-4 gap-4">
           
-          {/* Brand & Tagline */}
-          <div className="flex items-center space-x-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-cyan-600 via-emerald-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+          {/* Brand & Tagline - Clickable to go home */}
+          <button
+            onClick={() => setActiveTab('landing')}
+            className="flex items-center space-x-3 text-left group transition-all"
+          >
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-cyan-600 via-emerald-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
               <ShieldCheck className="h-6 w-6 text-white" />
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent group-hover:text-cyan-300 transition-colors">
                   PROVENANCE AI
                 </h1>
                 <span className="px-2 py-0.5 text-[10px] font-mono font-semibold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full flex items-center gap-1">
@@ -33,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, recordC
                 AI can make a decision. PROVENANCE AI makes that decision verifiable.
               </p>
             </div>
-          </div>
+          </button>
 
           {/* Ledger Status Pill, Hackathon Badge & AI Model Info */}
           <div className="flex flex-wrap items-center gap-2.5 text-xs">
@@ -74,10 +77,22 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, recordC
         {/* Tab Navigation */}
         <div className="flex space-x-1 border-t border-slate-800 pt-2 overflow-x-auto scrollbar-none">
           <button
+            onClick={() => setActiveTab('landing')}
+            className={`flex items-center space-x-2 px-4 py-2.5 text-xs font-medium rounded-t-lg transition-all border-b-2 whitespace-nowrap ${
+              activeTab === 'landing'
+                ? 'bg-slate-800/80 text-cyan-400 border-cyan-400 shadow-sm font-bold'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border-transparent'
+            }`}
+          >
+            <Home className="h-4 w-4 text-cyan-400" />
+            <span>Overview</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('workspace')}
             className={`flex items-center space-x-2 px-4 py-2.5 text-xs font-medium rounded-t-lg transition-all border-b-2 whitespace-nowrap ${
               activeTab === 'workspace'
-                ? 'bg-slate-800/80 text-cyan-400 border-cyan-400 shadow-sm'
+                ? 'bg-slate-800/80 text-cyan-400 border-cyan-400 shadow-sm font-bold'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border-transparent'
             }`}
           >
@@ -140,6 +155,18 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, recordC
             <span className="px-1.5 py-0.2 bg-indigo-500/20 text-indigo-300 text-[10px] rounded-full font-semibold">
               Remix
             </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('about')}
+            className={`flex items-center space-x-2 px-4 py-2.5 text-xs font-medium rounded-t-lg transition-all border-b-2 whitespace-nowrap ${
+              activeTab === 'about'
+                ? 'bg-slate-800/80 text-cyan-400 border-cyan-400 shadow-sm font-bold'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border-transparent'
+            }`}
+          >
+            <User className="h-4 w-4 text-cyan-400" />
+            <span>About</span>
           </button>
         </div>
 

@@ -23,7 +23,11 @@ import {
   Lock,
   ArrowUpRight,
   Lightbulb,
-  Milestone
+  Milestone,
+  HelpCircle,
+  Binary,
+  Brain,
+  Scale
 } from 'lucide-react';
 
 export const AboutTab: React.FC = () => {
@@ -324,6 +328,44 @@ export const AboutTab: React.FC = () => {
                   Simulates database tampering and live re-computes Merkle proofs, pinpointing corrupted fields instantly.
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* Who Audits the AI? Separation of Execution & Verification */}
+          <div className="p-6 sm:p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+            <div className="flex items-center gap-2 text-cyan-400">
+              <HelpCircle className="h-5 w-5" />
+              <h3 className="text-xl font-bold text-white">Who Audits the AI? Addressing the Circular AI Dilemma</h3>
+            </div>
+            
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
+              A common question in AI governance: <em>"If you audit an AI decision, but use AI in the process, how is that trustworthy?"</em>
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-1">
+              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                <div className="flex items-center gap-2 text-cyan-300 font-bold font-mono">
+                  <Brain className="h-4 w-4 text-cyan-400" />
+                  <span>AI = Probabilistic Execution Layer</span>
+                </div>
+                <p className="text-slate-400 text-[11px] leading-relaxed">
+                  AI is used purely as the operational decision engine to evaluate multi-vendor bids or applications and generate weighted score recommendations.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                <div className="flex items-center gap-2 text-emerald-300 font-bold font-mono">
+                  <Binary className="h-4 w-4 text-emerald-400" />
+                  <span>Audit Layer = Deterministic Math (Non-AI)</span>
+                </div>
+                <p className="text-slate-400 text-[11px] leading-relaxed">
+                  The verification layer is 100% mathematical: SHA-256 leaves, Merkle Trees, and Ethereum Sepolia smart contracts. It does not rely on AI hallucinations or bias.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-gradient-to-r from-cyan-950/40 to-indigo-950/40 border border-cyan-500/30 text-xs italic text-cyan-200">
+              "We don't ask auditors to trust AI. We freeze the exact snapshot of prompts, datasets, and reasoning trees into an immutable 32-byte Merkle root on-chain for complete legal non-repudiation."
             </div>
           </div>
 

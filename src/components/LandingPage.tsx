@@ -16,7 +16,10 @@ import {
   Code2,
   Trophy,
   Github,
-  AlertTriangle
+  AlertTriangle,
+  HelpCircle,
+  Binary,
+  Brain
 } from 'lucide-react';
 import { DecisionRecord } from '../types';
 
@@ -280,7 +283,102 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       </section>
 
-      {/* 4. RECENT ON-CHAIN DECISIONS PREVIEW */}
+      {/* 4. THE CIRCULAR AI DILEMMA: WHO AUDITS THE AI? */}
+      <section className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-800 p-6 sm:p-10 space-y-8">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="max-w-3xl space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+            <HelpCircle className="h-3.5 w-3.5 text-cyan-400" />
+            <span>The Circular AI Question</span>
+          </div>
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
+            "If You Use AI, Who Audits the Auditor?"
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">
+            A fundamental question in AI governance: Can AI be trusted to audit AI? At PROVENANCE AI, we solve this by strictly enforcing the <strong className="text-cyan-400">Separation of Execution and Verification</strong>.
+          </p>
+        </div>
+
+        {/* 3 Pillars of Separation */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          
+          {/* Pillar 1 */}
+          <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-3 relative flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="h-10 w-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <Brain className="h-5 w-5" />
+              </div>
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-400 font-bold">Execution Layer</span>
+                <h4 className="text-sm font-bold text-white mt-0.5">AI = Probabilistic Reasoner</h4>
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Google Gemini evaluates unstructured multi-criteria datasets, scoring vendor bids, loan files, or medical metrics. This layer handles heavy operational intelligence.
+              </p>
+            </div>
+            <div className="pt-3 border-t border-slate-900 text-[11px] font-mono text-cyan-300/80">
+              Role: Operational Intelligence
+            </div>
+          </div>
+
+          {/* Pillar 2 */}
+          <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-3 relative flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <Binary className="h-5 w-5" />
+              </div>
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-bold">Audit Layer (Non-AI)</span>
+                <h4 className="text-sm font-bold text-white mt-0.5">Deterministic Cryptography</h4>
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                The audit layer is <strong>100% mathematical, not AI</strong>. SHA-256 leaves, Zero-Knowledge Merkle Trees, and Ethereum Sepolia smart contracts operate with zero bias or hallucination.
+              </p>
+            </div>
+            <div className="pt-3 border-t border-slate-900 text-[11px] font-mono text-emerald-300/80">
+              Role: Immutable Math Engine
+            </div>
+          </div>
+
+          {/* Pillar 3 */}
+          <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-3 relative flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                <Scale className="h-5 w-5" />
+              </div>
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-indigo-400 font-bold">Outcome</span>
+                <h4 className="text-sm font-bold text-white mt-0.5">Glass-Box Non-Repudiation</h4>
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                We don't ask auditors to "trust AI." We give human auditors mathematical proof that freezes the exact prompts, parameters, and reasoning chains to guarantee forensic reproducibility.
+              </p>
+            </div>
+            <div className="pt-3 border-t border-slate-900 text-[11px] font-mono text-indigo-300/80">
+              Role: Legal & Forensic Defense
+            </div>
+          </div>
+
+        </div>
+
+        {/* Highlighted Quote Box */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-950 to-indigo-950/40 border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="text-xs text-slate-200 leading-relaxed font-light">
+            <span className="text-cyan-400 font-mono font-bold block mb-1">Architectural Principle:</span>
+            "We do not use AI to blindly validate AI. In PROVENANCE AI, AI is the decision engine, while the auditor is 100% deterministic cryptography and decentralized Ethereum consensus."
+          </div>
+          <button
+            onClick={onLaunchVerifier}
+            className="flex-shrink-0 px-4 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-mono font-bold flex items-center gap-1.5 transition-all"
+          >
+            <span>Test Forensic Verifier</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      </section>
+
+      {/* 5. RECENT ON-CHAIN DECISIONS PREVIEW */}
       {recentRecords.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center justify-between">

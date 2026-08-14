@@ -6,9 +6,16 @@ interface HeaderProps {
   setActiveTab: (tab: 'landing' | 'workspace' | 'ledger' | 'verifier' | 'certificate' | 'contract' | 'about') => void;
   recordCount: number;
   onOpenPitchDeck?: () => void;
+  onOpenIdentityModal?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, recordCount, onOpenPitchDeck }) => {
+export const Header: React.FC<HeaderProps> = ({ 
+  activeTab, 
+  setActiveTab, 
+  recordCount, 
+  onOpenPitchDeck,
+  onOpenIdentityModal
+}) => {
   return (
     <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-50 backdrop-blur-md bg-opacity-95 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,8 +45,21 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, recordC
             </div>
           </button>
 
-          {/* Ledger Status Pill, Hackathon Badge & AI Model Info */}
+          {/* Ledger Status Pill, Verified Agent Identity Badge & Hackathon Badge */}
           <div className="flex flex-wrap items-center gap-2.5 text-xs">
+            {onOpenIdentityModal && (
+              <button
+                id="header-verified-agent-identity-badge"
+                onClick={onOpenIdentityModal}
+                className="group flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 font-mono font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
+                title="View Cryptographic Governance Root Hash"
+              >
+                <ShieldCheck className="h-3.5 w-3.5 text-cyan-400 group-hover:rotate-12 transition-transform" />
+                <span className="font-bold">Verified Agent Identity</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              </button>
+            )}
+
             {onOpenPitchDeck && (
               <button
                 onClick={onOpenPitchDeck}
